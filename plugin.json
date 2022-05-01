@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
-  "title": "Bandcamp",
+  "version": "1.0.1",
+  "title": "Bandcamp Shortcode with Layouts",
   "description": "Adds the ability to get widgets from Bandcamp"
 }

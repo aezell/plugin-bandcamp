@@ -8,15 +8,19 @@ A customizable Bandcamp plugin for Micro.blog
 
 This plugin provides a [Hugo shortcode](https://gohugo.io/content-management/shortcodes/) for your Micro.blog that makes it easy to add embeddable Bandcamp players for URLs of music you'd like to share. There is some light customization available via parameters to the short code.
 
+## Requirements
+
+Because of how the parameters are parsed in this shortcode, you'll need to use the `Hugo 0.91` option to build your Micro.blog site. You can change this on the Design page. Just be warned that if you aren't already using `0.91` you may run into some compatibility issues with your theme or other customizations when you switch.
+
 ## Basic Usage
 
 The simplest usage of the Bandcamp shortcode works like this:
 
 ```html
-{{< bandcamp "https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" >}}
+{{< bandcamp `https://jakexerxesfussell.bandcamp.com/album/good-and-green-again` >}}
 ```
 
-Yes, the URL must be in quotes otherwise we get a Hugo parsing error.
+The URL must be in backticks otherwise we get a Hugo parsing error. It could be auto-converted by MB to the markdown for a link. In the advanced usages below, we can keep the regular doublequote usage or use backticks as well. Either will work but for this shortest form, it must be backticks.
 
 ## Screenshot
 
