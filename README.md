@@ -16,7 +16,7 @@ Because of how the parameters are parsed in this shortcode, you'll need to use t
 
 The simplest usage of the Bandcamp shortcode works like this:
 
-```html
+```
 {{< bandcamp `https://jakexerxesfussell.bandcamp.com/album/good-and-green-again` >}}
 ```
 
@@ -31,37 +31,37 @@ The URL must be in backticks otherwise we get a Hugo parsing error. It could be 
 If you use some named parameters, you can customize the layout of your Bandcamp widget, like this:
 
 #### Fancy with small art and full tracklist for a dark theme
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="standard-small-art" tracklist="true" theme="dark" >}}
 ```
 
 #### That same layout but with the light theme
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="standard-small-art" tracklist="true" theme="light" >}}
 ```
 
 #### And now with no tracklist
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="standard-small-art" tracklist="false" >}}
 ```
 
 #### There's one for folks that love bigger art
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="standard-big-art" >}}
 ```
 
 #### Or no art
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="standard-no-art" tracklist="true" >}}
 ```
 
 #### Or only art
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="artwork-only" >}}
 ```
 
 #### You can even make it slim
-```html
+```
 {{< bandcamp url="https://jakexerxesfussell.bandcamp.com/album/good-and-green-again" layout="slim-with-art" theme="dark" >}}
 ```
 
