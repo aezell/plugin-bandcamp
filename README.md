@@ -20,7 +20,7 @@ Yes, the URL must be in quotes otherwise we get a Hugo parsing error.
 
 ## Screenshot
 
-
+![simple_shot](https://user-images.githubusercontent.com/2454/166129522-0903dc79-b263-4001-b702-aa35b54d11f8.png)
 
 ## Advanced Usage
 
