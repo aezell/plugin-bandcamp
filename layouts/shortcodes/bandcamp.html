@@ -1,0 +1,129 @@
+{{/* Do we have named params? */}}
+{{  if .IsNamedParams }}
+  
+  {{/* Set default for the tracklist param */}}
+  {{ $tracklist_display := .Get "tracklist" | default "false" }}
+  {{ $.Scratch.Set "tracklist" $tracklist_display }}
+  
+  {{/* Set default layout */}}
+  {{ $layout := .Get "layout" | default "standard" }}
+  
+  {{/* Work through the layout params based on what BC lets you do */}}
+  {{/* We don't let users set these as arguments because BC will give */}}
+  {{/* strange results if you combine these in unexpected ways */}}
+  {{ with $layout }}
+    {{ if eq . "artwork-only"}}
+      {{ $.Scratch.Set "width" "350px" }}
+      {{ $.Scratch.Set "height" "350px" }}
+      {{ $.Scratch.Set "size" "large" }}
+      {{ $.Scratch.Set "extra" "minimal=true/" }}
+    {{ else if eq . "slim-with-art" }}
+      {{ $.Scratch.Set "width" "100%" }}
+      {{ $.Scratch.Set "height" "42px" }}
+      {{ $.Scratch.Set "size" "small" }}
+      {{ $.Scratch.Set "extra" "" }}
+    {{ else if eq . "slim-no-art" }}
+      {{ $.Scratch.Set "width" "100%" }}
+      {{ $.Scratch.Set "height" "42px" }}
+      {{ $.Scratch.Set "size" "small" }}
+      {{ $.Scratch.Set "extra" "artwork=none/" }}
+    {{ else if eq . "standard-big-art" }}
+      {{ $.Scratch.Set "width" "350px" }}
+      {{ $.Scratch.Set "height" "786px" }}
+      {{ $.Scratch.Set "size" "large" }}
+      {{ $.Scratch.Set "extra" "" }}
+      {{ if eq ($.Scratch.Get "tracklist") "true" }}
+        {{/* I know this is weird but it's what BC wants for tracklist */}}
+        {{ $.Scratch.Set "tracklist" "" }}
+        {{ $.Scratch.Set "height" "786px" }}
+        {{ $.Scratch.Set "width" "350px" }}
+      {{ else }}
+        {{ $.Scratch.Set "tracklist" "tracklist=false/" }}
+        {{ $.Scratch.Set "height" "470px" }}
+        {{ $.Scratch.Set "width" "350px" }}
+      {{ end }}
+    {{ else if eq . "standard-small-art" }}
+      {{ $.Scratch.Set "width" "100%" }}
+      {{ $.Scratch.Set "height" "120px" }}
+      {{ $.Scratch.Set "size" "large" }}
+      {{ $.Scratch.Set "extra" "artwork=small/" }}
+      {{ if eq ($.Scratch.Get "tracklist") "true" }}
+        {{/* I know this is weird but it's what BC wants for tracklist */}}
+        {{ $.Scratch.Set "tracklist" "" }}
+        {{ $.Scratch.Set "height" "472px" }}
+        {{ $.Scratch.Set "width" "100%" }}
+      {{ else }}
+        {{ $.Scratch.Set "tracklist" "tracklist=false/" }}
+        {{ $.Scratch.Set "height" "120px" }}
+        {{ $.Scratch.Set "width" "100%" }}
+      {{ end }}
+    {{ else if eq . "standard-no-art" }}
+      {{ $.Scratch.Set "width" "350px" }}
+      {{ $.Scratch.Set "height" "120px" }}
+      {{ $.Scratch.Set "size" "large" }}
+      {{ $.Scratch.Set "extra" "artwork=none/" }}
+      {{ if eq ($.Scratch.Get "tracklist") "true" }}
+        {{/* I know this is weird but it's what BC wants for tracklist */}}
+        {{ $.Scratch.Set "tracklist" "" }}
+        {{ $.Scratch.Set "height" "472px" }}
+        {{ $.Scratch.Set "width" "350px" }}
+      {{ else }}
+        {{ $.Scratch.Set "tracklist" "tracklist=false/" }}
+        {{ $.Scratch.Set "height" "120px" }}
+        {{ $.Scratch.Set "width" "350px" }}
+      {{ end }}
+    {{ else }}
+      You specified a layout that doesn't exist.
+    {{ end }}
+  {{ end }}
+  
+  {{/* Set default theme */}}
+  {{/* BC only supports a specific light or dark background. Even though */}}
+  {{/* the code has RGB hex values, BC ignores anything but the set they support. */}}
+  {{ $theme := .Get "theme" | default "light" }}
+  {{ with $theme }}
+    {{ if eq "dark" . }}
+      {{ $.Scratch.Set "bgcol" "333333" }}
+    {{ else }}
+      {{ $.Scratch.Set "bgcol" "ffffff" }}
+    {{ end }}
+    {{ $.Scratch.Set "linkcol" "0687f5" }}
+  {{ end }}
+
+  {{ $transparent := .Get "transparent" | default "false" }}
+  
+  {{/* Get the URL from params  */}}
+  {{ $bc_url := .Get "url" }}
+  {{ with resources.GetRemote $bc_url }} 
+    
+    {{/* Regex to find the album_id */}}
+    {{ $album_id_dirty := index (findRE `\/album=([0-9]*)` .Content 1) 0 }} 
+    {{ $album_id := replace $album_id_dirty "/album=" "" }}
+    
+    <iframe
+      style="border: 0; width: {{ $.Scratch.Get "width" }}; height: {{ $.Scratch.Get "height" }}"
+      src="https://bandcamp.com/EmbeddedPlayer/album={{ $album_id }}/size={{ $.Scratch.Get "size" }}/bgcol={{ $.Scratch.Get "bgcol" }}/linkcol={{ $.Scratch.Get "linkcol" }}/transparent={{ $transparent }}/{{ $.Scratch.Get "tracklist" }}{{ $.Scratch.Get "extra" }}"
+      seamless
+    >
+      <a href="{{ $bc_url }}">.Title</a>
+    </iframe>
+  {{ end }}
+{{ else }}
+  {{/* User has provided only one param: the URL  */}}
+  {{/* So, we give them the most common layout and theme  */}}
+  
+  {{ $bc_url := .Get 0 }}
+  {{ with resources.GetRemote $bc_url }} 
+  
+    {{/* Regex to find the album_id */}}
+    {{ $album_id_dirty := index (findRE `\/album=([0-9]*)` .Content 1) 0 }} 
+    {{ $album_id := replace $album_id_dirty "/album=" "" }}
+    <iframe
+      style="border: 0; width: 100%; height: 120px"
+      src="https://bandcamp.com/EmbeddedPlayer/album={{ $album_id }}/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/"
+      seamless
+    >
+      <a href="{{ $bc_url }}">.Title</a>
+    </iframe>
+  {{ end }}
+{{ end }}
